@@ -19,8 +19,7 @@ export const register = async (req, res) => {
   if (!userName || !password) {
     return res
       .status(401)
-      .json({ message: 'userName and password is required' })
-      .end();
+      .json({ message: 'userName and password is required' });
   }
 
   try {
@@ -45,14 +44,13 @@ export const login = async (req, res) => {
   if (!userName || !password) {
     return res
       .status(401)
-      .json({ message: 'userName and password is required' })
-      .end();
+      .json({ message: 'userName and password is required' });
   }
 
   const allUser = database.getAll();
   const user = allUser.find((user) => user.userName === userName);
   if (!user) {
-    res.status(404).send('user not found');
+    res.status(404).json('user not found');
     return;
   }
 
@@ -60,7 +58,7 @@ export const login = async (req, res) => {
     const correctPassword = await bcrypt.compare(password, user.password);
     if (correctPassword) {
       const token = jwt.sign({ id: user.id }, SECRET_KEY, { expiresIn: '30m' });
-      res.status(200).send({ message: 'you login ', token });
+      res.status(200).json({ message: 'you login ', token });
     }
   } catch (error) {
     res.status(500).json({ message: 'Something went wrong with server!' });
@@ -87,7 +85,7 @@ export const getProfile = async (req, res) => {
 };
 
 export const logout = async (req, res) => {
-  res.status(200).send('you are logout!');
+  res.status(200).json('you are logout!');
 };
 
 // You can also create helper functions in this file to help you implement logic
